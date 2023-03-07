@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\v1\AuthController;
+use App\Http\Controllers\api\v1\DepartmentController;
 use App\Http\Controllers\api\v1\ProjectController;
 use App\Http\Controllers\api\v1\TaskController;
 use App\Http\Controllers\api\v1\UserController;
@@ -27,13 +28,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login'])->name('user.login');
         Route::post('logout', [AuthController::class, 'logout'])->middleware(['auth:api'])->name('user.logout');
-
-
     });
 
     Route::middleware('auth:api')->group(function (){
         Route::middleware('role:admin')->group(function (){
             Route::apiResource('users',UserController::class);
+            Route::apiResource('departments', DepartmentController::class);
         });
         Route::get("project/{id}/tasks",[TaskController::class,"tasksByProject"]);
         Route::apiResource('projects', ProjectController::class);

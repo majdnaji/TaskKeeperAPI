@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\api\v1;
 
+use App\Http\Resources\DepartmentResource;
 use App\Models\Department;
 use Illuminate\Http\Request;
 
-class DepartmentController extends Controller
+class DepartmentController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,12 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        $items=Department::paginate();
+        if(count($items)>0){
+            $paginateData = $this->formatPaginateData($items);
+            return $this->apiResponse(DepartmentResource::collection($items), self::STATUS_OK, __('site.get_successfully'),$paginateData);
+        }
+        return $this->apiResponse([], self::STATUS_OK, __('site.there_is_no_data'));
     }
 
     /**
@@ -49,16 +55,7 @@ class DepartmentController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Department  $department
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Department $department)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -78,8 +75,13 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Department $department)
+    public function destroy($id)
     {
-        //
+        $item=Department::find($id);
+        if(!$item)
+            return $this->apiResponse(null,ApiController::STATUS_NOT_FOUND);
+        if($item->delete())
+            return $this->apiResponse();
+        return $this->apiResponse(null,ApiController::SERVER_ERROR);
     }
 }

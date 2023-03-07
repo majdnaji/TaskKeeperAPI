@@ -84,10 +84,10 @@ class ProjectController extends ApiController
      */
     public function destroy($id)
     {
-        $user=Project::find($id);
-        if(!$user)
+        $item=Project::find($id);
+        if(!$item)
             return $this->apiResponse(null,ApiController::STATUS_NOT_FOUND);
-        if($user->delete())
+        if($item->delete())
             return $this->apiResponse();
         return $this->apiResponse(null,ApiController::SERVER_ERROR);
     }
