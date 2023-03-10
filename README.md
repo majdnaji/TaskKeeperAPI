@@ -18,7 +18,7 @@ Clone the project
 Go to the project directory
 
 ```bash
-  cd supreme-guide
+  cd TaskKeeperAPI
 ```
 
 Install dependencies
